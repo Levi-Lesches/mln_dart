@@ -1,10 +1,9 @@
 import 'package:serverpod/serverpod.dart';
 
-import 'package:mln_server/src/web/routes/root.dart';
-
 import 'src/generated/protocol.dart';
 import 'src/generated/endpoints.dart';
-import 'src/web/routes/api.dart';
+import 'src/routes/auth.dart';
+import 'src/routes/mail.dart';
 
 // This is the starting point of your Serverpod server. In most cases, you will
 // only need to make additions to this file if you add future calls,  are
@@ -15,18 +14,19 @@ void run(List<String> args) async {
   final pod = Serverpod(args, Protocol(), Endpoints());
 
   // Setup a default page at the web root.
-  pod.webServer.addRoute(RouteRoot(), '/');
-  pod.webServer.addRoute(RouteRoot(), '/index.html');
+  // pod.webServer.addRoute(RouteRoot(), '/');
+  // pod.webServer.addRoute(RouteRoot(), '/index.html');
+
   // Serve all files in the /static directory.
   pod.webServer.addRoute(
     RouteStaticDirectory(serverDirectory: 'static', basePath: '/'),
     '/*',
   );
 
-  pod.webServer.addRoute(CreateRoute(), "/api/create");
-  pod.webServer.addRoute(ApiRoute(), "/api/get");
   pod.webServer.addRoute(SendRoute(), "/api/send");
   pod.webServer.addRoute(InboxRoute(), "/api/inbox");
+  pod.webServer.addRoute(AuthRoute(), "/api/login");
+  pod.webServer.addRoute(AuthTestRoute(), "/api/auth-test");
 
   // Start the server.
   await pod.start();

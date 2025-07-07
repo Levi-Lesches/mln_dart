@@ -19,6 +19,7 @@ import 'message_template.dart' as _i7;
 import 'profile.dart' as _i8;
 import 'template_attachments.dart' as _i9;
 import 'user.dart' as _i10;
+import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i11;
 export 'greeting.dart';
 export 'item_info.dart';
 export 'message.dart';
@@ -99,6 +100,9 @@ class Protocol extends _i1.SerializationManager {
     if (t == _i1.getType<_i10.User?>()) {
       return (data != null ? _i10.User.fromJson(data) : null) as T;
     }
+    try {
+      return _i11.Protocol().deserialize<T>(data, t);
+    } on _i1.DeserializationTypeNotFoundException catch (_) {}
     return super.deserialize<T>(data, t);
   }
 
@@ -132,6 +136,10 @@ class Protocol extends _i1.SerializationManager {
     }
     if (data is _i10.User) {
       return 'User';
+    }
+    className = _i11.Protocol().getClassNameForObject(data);
+    if (className != null) {
+      return 'serverpod_auth.$className';
     }
     return null;
   }
@@ -168,6 +176,10 @@ class Protocol extends _i1.SerializationManager {
     }
     if (dataClassName == 'User') {
       return deserialize<_i10.User>(data['data']);
+    }
+    if (dataClassName.startsWith('serverpod_auth.')) {
+      data['className'] = dataClassName.substring(15);
+      return _i11.Protocol().deserializeByClassName(data);
     }
     return super.deserializeByClassName(data);
   }
