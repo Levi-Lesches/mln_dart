@@ -1,0 +1,4 @@
+class: MessageTemplate
+table: message_templates
+fields:
+  body: MessageBody?, relation

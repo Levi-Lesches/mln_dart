@@ -1,0 +1,6 @@
+class: MessageTemplateAttachment
+table: message_table_attachments
+fields:
+  template: MessageTemplate?, relation
+  item: ItemInfo?, relation
+  qty: int

@@ -12,10 +12,22 @@
 import 'package:serverpod/serverpod.dart' as _i1;
 import 'package:serverpod/protocol.dart' as _i2;
 import 'greeting.dart' as _i3;
-import 'profile.dart' as _i4;
-import 'user.dart' as _i5;
+import 'item_info.dart' as _i4;
+import 'message.dart' as _i5;
+import 'message_attachment.dart' as _i6;
+import 'message_body.dart' as _i7;
+import 'message_template.dart' as _i8;
+import 'profile.dart' as _i9;
+import 'template_attachments.dart' as _i10;
+import 'user.dart' as _i11;
 export 'greeting.dart';
+export 'item_info.dart';
+export 'message.dart';
+export 'message_attachment.dart';
+export 'message_body.dart';
+export 'message_template.dart';
 export 'profile.dart';
+export 'template_attachments.dart';
 export 'user.dart';
 
 class Protocol extends _i1.SerializationManagerServer {
@@ -26,6 +38,361 @@ class Protocol extends _i1.SerializationManagerServer {
   static final Protocol _instance = Protocol._();
 
   static final List<_i2.TableDefinition> targetTableDefinitions = [
+    _i2.TableDefinition(
+      name: 'item_infos',
+      dartName: 'ItemInfo',
+      schema: 'public',
+      module: 'mln',
+      columns: [
+        _i2.ColumnDefinition(
+          name: 'id',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int?',
+          columnDefault: 'nextval(\'item_infos_id_seq\'::regclass)',
+        ),
+        _i2.ColumnDefinition(
+          name: 'name',
+          columnType: _i2.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+      ],
+      foreignKeys: [],
+      indexes: [
+        _i2.IndexDefinition(
+          indexName: 'item_infos_pkey',
+          tableSpace: null,
+          elements: [
+            _i2.IndexElementDefinition(
+              type: _i2.IndexElementDefinitionType.column,
+              definition: 'id',
+            )
+          ],
+          type: 'btree',
+          isUnique: true,
+          isPrimary: true,
+        )
+      ],
+      managed: true,
+    ),
+    _i2.TableDefinition(
+      name: 'message_attachments',
+      dartName: 'MessageAttachment',
+      schema: 'public',
+      module: 'mln',
+      columns: [
+        _i2.ColumnDefinition(
+          name: 'id',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int?',
+          columnDefault: 'nextval(\'message_attachments_id_seq\'::regclass)',
+        ),
+        _i2.ColumnDefinition(
+          name: 'itemId',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _i2.ColumnDefinition(
+          name: 'qty',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _i2.ColumnDefinition(
+          name: 'messageId',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+      ],
+      foreignKeys: [
+        _i2.ForeignKeyDefinition(
+          constraintName: 'message_attachments_fk_0',
+          columns: ['itemId'],
+          referenceTable: 'item_infos',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _i2.ForeignKeyAction.noAction,
+          onDelete: _i2.ForeignKeyAction.noAction,
+          matchType: null,
+        ),
+        _i2.ForeignKeyDefinition(
+          constraintName: 'message_attachments_fk_1',
+          columns: ['messageId'],
+          referenceTable: 'messages',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _i2.ForeignKeyAction.noAction,
+          onDelete: _i2.ForeignKeyAction.noAction,
+          matchType: null,
+        ),
+      ],
+      indexes: [
+        _i2.IndexDefinition(
+          indexName: 'message_attachments_pkey',
+          tableSpace: null,
+          elements: [
+            _i2.IndexElementDefinition(
+              type: _i2.IndexElementDefinitionType.column,
+              definition: 'id',
+            )
+          ],
+          type: 'btree',
+          isUnique: true,
+          isPrimary: true,
+        )
+      ],
+      managed: true,
+    ),
+    _i2.TableDefinition(
+      name: 'message_bodies',
+      dartName: 'MessageBody',
+      schema: 'public',
+      module: 'mln',
+      columns: [
+        _i2.ColumnDefinition(
+          name: 'id',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int?',
+          columnDefault: 'nextval(\'message_bodies_id_seq\'::regclass)',
+        ),
+        _i2.ColumnDefinition(
+          name: 'subject',
+          columnType: _i2.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _i2.ColumnDefinition(
+          name: 'text',
+          columnType: _i2.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+      ],
+      foreignKeys: [],
+      indexes: [
+        _i2.IndexDefinition(
+          indexName: 'message_bodies_pkey',
+          tableSpace: null,
+          elements: [
+            _i2.IndexElementDefinition(
+              type: _i2.IndexElementDefinitionType.column,
+              definition: 'id',
+            )
+          ],
+          type: 'btree',
+          isUnique: true,
+          isPrimary: true,
+        )
+      ],
+      managed: true,
+    ),
+    _i2.TableDefinition(
+      name: 'message_table_attachments',
+      dartName: 'MessageTemplateAttachment',
+      schema: 'public',
+      module: 'mln',
+      columns: [
+        _i2.ColumnDefinition(
+          name: 'id',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int?',
+          columnDefault:
+              'nextval(\'message_table_attachments_id_seq\'::regclass)',
+        ),
+        _i2.ColumnDefinition(
+          name: 'templateId',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _i2.ColumnDefinition(
+          name: 'itemId',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _i2.ColumnDefinition(
+          name: 'qty',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+      ],
+      foreignKeys: [
+        _i2.ForeignKeyDefinition(
+          constraintName: 'message_table_attachments_fk_0',
+          columns: ['templateId'],
+          referenceTable: 'message_templates',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _i2.ForeignKeyAction.noAction,
+          onDelete: _i2.ForeignKeyAction.noAction,
+          matchType: null,
+        ),
+        _i2.ForeignKeyDefinition(
+          constraintName: 'message_table_attachments_fk_1',
+          columns: ['itemId'],
+          referenceTable: 'item_infos',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _i2.ForeignKeyAction.noAction,
+          onDelete: _i2.ForeignKeyAction.noAction,
+          matchType: null,
+        ),
+      ],
+      indexes: [
+        _i2.IndexDefinition(
+          indexName: 'message_table_attachments_pkey',
+          tableSpace: null,
+          elements: [
+            _i2.IndexElementDefinition(
+              type: _i2.IndexElementDefinitionType.column,
+              definition: 'id',
+            )
+          ],
+          type: 'btree',
+          isUnique: true,
+          isPrimary: true,
+        )
+      ],
+      managed: true,
+    ),
+    _i2.TableDefinition(
+      name: 'message_templates',
+      dartName: 'MessageTemplate',
+      schema: 'public',
+      module: 'mln',
+      columns: [
+        _i2.ColumnDefinition(
+          name: 'id',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int?',
+          columnDefault: 'nextval(\'message_templates_id_seq\'::regclass)',
+        ),
+        _i2.ColumnDefinition(
+          name: 'bodyId',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+      ],
+      foreignKeys: [
+        _i2.ForeignKeyDefinition(
+          constraintName: 'message_templates_fk_0',
+          columns: ['bodyId'],
+          referenceTable: 'message_bodies',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _i2.ForeignKeyAction.noAction,
+          onDelete: _i2.ForeignKeyAction.noAction,
+          matchType: null,
+        )
+      ],
+      indexes: [
+        _i2.IndexDefinition(
+          indexName: 'message_templates_pkey',
+          tableSpace: null,
+          elements: [
+            _i2.IndexElementDefinition(
+              type: _i2.IndexElementDefinitionType.column,
+              definition: 'id',
+            )
+          ],
+          type: 'btree',
+          isUnique: true,
+          isPrimary: true,
+        )
+      ],
+      managed: true,
+    ),
+    _i2.TableDefinition(
+      name: 'messages',
+      dartName: 'Message',
+      schema: 'public',
+      module: 'mln',
+      columns: [
+        _i2.ColumnDefinition(
+          name: 'id',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int?',
+          columnDefault: 'nextval(\'messages_id_seq\'::regclass)',
+        ),
+        _i2.ColumnDefinition(
+          name: 'senderId',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _i2.ColumnDefinition(
+          name: 'reipientId',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _i2.ColumnDefinition(
+          name: 'bodyId',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+      ],
+      foreignKeys: [
+        _i2.ForeignKeyDefinition(
+          constraintName: 'messages_fk_0',
+          columns: ['senderId'],
+          referenceTable: 'user',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _i2.ForeignKeyAction.noAction,
+          onDelete: _i2.ForeignKeyAction.noAction,
+          matchType: null,
+        ),
+        _i2.ForeignKeyDefinition(
+          constraintName: 'messages_fk_1',
+          columns: ['reipientId'],
+          referenceTable: 'user',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _i2.ForeignKeyAction.noAction,
+          onDelete: _i2.ForeignKeyAction.noAction,
+          matchType: null,
+        ),
+        _i2.ForeignKeyDefinition(
+          constraintName: 'messages_fk_2',
+          columns: ['bodyId'],
+          referenceTable: 'message_bodies',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _i2.ForeignKeyAction.noAction,
+          onDelete: _i2.ForeignKeyAction.noAction,
+          matchType: null,
+        ),
+      ],
+      indexes: [
+        _i2.IndexDefinition(
+          indexName: 'messages_pkey',
+          tableSpace: null,
+          elements: [
+            _i2.IndexElementDefinition(
+              type: _i2.IndexElementDefinitionType.column,
+              definition: 'id',
+            )
+          ],
+          type: 'btree',
+          isUnique: true,
+          isPrimary: true,
+        )
+      ],
+      managed: true,
+    ),
     _i2.TableDefinition(
       name: 'profile',
       dartName: 'Profile',
@@ -131,20 +498,58 @@ class Protocol extends _i1.SerializationManagerServer {
     if (t == _i3.Greeting) {
       return _i3.Greeting.fromJson(data) as T;
     }
-    if (t == _i4.Profile) {
-      return _i4.Profile.fromJson(data) as T;
+    if (t == _i4.ItemInfo) {
+      return _i4.ItemInfo.fromJson(data) as T;
     }
-    if (t == _i5.User) {
-      return _i5.User.fromJson(data) as T;
+    if (t == _i5.Message) {
+      return _i5.Message.fromJson(data) as T;
+    }
+    if (t == _i6.MessageAttachment) {
+      return _i6.MessageAttachment.fromJson(data) as T;
+    }
+    if (t == _i7.MessageBody) {
+      return _i7.MessageBody.fromJson(data) as T;
+    }
+    if (t == _i8.MessageTemplate) {
+      return _i8.MessageTemplate.fromJson(data) as T;
+    }
+    if (t == _i9.Profile) {
+      return _i9.Profile.fromJson(data) as T;
+    }
+    if (t == _i10.MessageTemplateAttachment) {
+      return _i10.MessageTemplateAttachment.fromJson(data) as T;
+    }
+    if (t == _i11.User) {
+      return _i11.User.fromJson(data) as T;
     }
     if (t == _i1.getType<_i3.Greeting?>()) {
       return (data != null ? _i3.Greeting.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i4.Profile?>()) {
-      return (data != null ? _i4.Profile.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i4.ItemInfo?>()) {
+      return (data != null ? _i4.ItemInfo.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i5.User?>()) {
-      return (data != null ? _i5.User.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i5.Message?>()) {
+      return (data != null ? _i5.Message.fromJson(data) : null) as T;
+    }
+    if (t == _i1.getType<_i6.MessageAttachment?>()) {
+      return (data != null ? _i6.MessageAttachment.fromJson(data) : null) as T;
+    }
+    if (t == _i1.getType<_i7.MessageBody?>()) {
+      return (data != null ? _i7.MessageBody.fromJson(data) : null) as T;
+    }
+    if (t == _i1.getType<_i8.MessageTemplate?>()) {
+      return (data != null ? _i8.MessageTemplate.fromJson(data) : null) as T;
+    }
+    if (t == _i1.getType<_i9.Profile?>()) {
+      return (data != null ? _i9.Profile.fromJson(data) : null) as T;
+    }
+    if (t == _i1.getType<_i10.MessageTemplateAttachment?>()) {
+      return (data != null
+          ? _i10.MessageTemplateAttachment.fromJson(data)
+          : null) as T;
+    }
+    if (t == _i1.getType<_i11.User?>()) {
+      return (data != null ? _i11.User.fromJson(data) : null) as T;
     }
     try {
       return _i2.Protocol().deserialize<T>(data, t);
@@ -159,10 +564,28 @@ class Protocol extends _i1.SerializationManagerServer {
     if (data is _i3.Greeting) {
       return 'Greeting';
     }
-    if (data is _i4.Profile) {
+    if (data is _i4.ItemInfo) {
+      return 'ItemInfo';
+    }
+    if (data is _i5.Message) {
+      return 'Message';
+    }
+    if (data is _i6.MessageAttachment) {
+      return 'MessageAttachment';
+    }
+    if (data is _i7.MessageBody) {
+      return 'MessageBody';
+    }
+    if (data is _i8.MessageTemplate) {
+      return 'MessageTemplate';
+    }
+    if (data is _i9.Profile) {
       return 'Profile';
     }
-    if (data is _i5.User) {
+    if (data is _i10.MessageTemplateAttachment) {
+      return 'MessageTemplateAttachment';
+    }
+    if (data is _i11.User) {
       return 'User';
     }
     className = _i2.Protocol().getClassNameForObject(data);
@@ -181,11 +604,29 @@ class Protocol extends _i1.SerializationManagerServer {
     if (dataClassName == 'Greeting') {
       return deserialize<_i3.Greeting>(data['data']);
     }
+    if (dataClassName == 'ItemInfo') {
+      return deserialize<_i4.ItemInfo>(data['data']);
+    }
+    if (dataClassName == 'Message') {
+      return deserialize<_i5.Message>(data['data']);
+    }
+    if (dataClassName == 'MessageAttachment') {
+      return deserialize<_i6.MessageAttachment>(data['data']);
+    }
+    if (dataClassName == 'MessageBody') {
+      return deserialize<_i7.MessageBody>(data['data']);
+    }
+    if (dataClassName == 'MessageTemplate') {
+      return deserialize<_i8.MessageTemplate>(data['data']);
+    }
     if (dataClassName == 'Profile') {
-      return deserialize<_i4.Profile>(data['data']);
+      return deserialize<_i9.Profile>(data['data']);
+    }
+    if (dataClassName == 'MessageTemplateAttachment') {
+      return deserialize<_i10.MessageTemplateAttachment>(data['data']);
     }
     if (dataClassName == 'User') {
-      return deserialize<_i5.User>(data['data']);
+      return deserialize<_i11.User>(data['data']);
     }
     if (dataClassName.startsWith('serverpod.')) {
       data['className'] = dataClassName.substring(10);
@@ -203,10 +644,22 @@ class Protocol extends _i1.SerializationManagerServer {
       }
     }
     switch (t) {
-      case _i4.Profile:
-        return _i4.Profile.t;
-      case _i5.User:
-        return _i5.User.t;
+      case _i4.ItemInfo:
+        return _i4.ItemInfo.t;
+      case _i5.Message:
+        return _i5.Message.t;
+      case _i6.MessageAttachment:
+        return _i6.MessageAttachment.t;
+      case _i7.MessageBody:
+        return _i7.MessageBody.t;
+      case _i8.MessageTemplate:
+        return _i8.MessageTemplate.t;
+      case _i9.Profile:
+        return _i9.Profile.t;
+      case _i10.MessageTemplateAttachment:
+        return _i10.MessageTemplateAttachment.t;
+      case _i11.User:
+        return _i11.User.t;
     }
     return null;
   }

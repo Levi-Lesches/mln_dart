@@ -1,0 +1,6 @@
+class: Message
+table: messages
+fields:
+  sender: User?, relation
+  reipient: User?, relation
+  body: MessageBody?, relation

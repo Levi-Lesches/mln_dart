@@ -1,0 +1,99 @@
+{
+  "actions": [
+    {
+      "type": "deleteTable",
+      "deleteTable": "message_attachments"
+    },
+    {
+      "type": "createTable",
+      "createTable": {
+        "name": "message_attachments",
+        "dartName": "MessageAttachment",
+        "module": "mln",
+        "schema": "public",
+        "columns": [
+          {
+            "name": "id",
+            "columnType": 6,
+            "isNullable": false,
+            "columnDefault": "nextval('message_attachments_id_seq'::regclass)",
+            "dartType": "int?"
+          },
+          {
+            "name": "itemId",
+            "columnType": 6,
+            "isNullable": false,
+            "dartType": "int"
+          },
+          {
+            "name": "qty",
+            "columnType": 6,
+            "isNullable": false,
+            "dartType": "int"
+          },
+          {
+            "name": "messageId",
+            "columnType": 6,
+            "isNullable": false,
+            "dartType": "int"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "constraintName": "message_attachments_fk_0",
+            "columns": [
+              "itemId"
+            ],
+            "referenceTable": "item_infos",
+            "referenceTableSchema": "public",
+            "referenceColumns": [
+              "id"
+            ],
+            "onUpdate": 3,
+            "onDelete": 3
+          },
+          {
+            "constraintName": "message_attachments_fk_1",
+            "columns": [
+              "messageId"
+            ],
+            "referenceTable": "messages",
+            "referenceTableSchema": "public",
+            "referenceColumns": [
+              "id"
+            ],
+            "onUpdate": 3,
+            "onDelete": 3
+          }
+        ],
+        "indexes": [
+          {
+            "indexName": "message_attachments_pkey",
+            "elements": [
+              {
+                "type": 0,
+                "definition": "id"
+              }
+            ],
+            "type": "btree",
+            "isUnique": true,
+            "isPrimary": true
+          }
+        ],
+        "managed": true
+      }
+    }
+  ],
+  "warnings": [
+    {
+      "type": "tableDropped",
+      "message": "One or more columns are added to table \"message_attachments\" which cannot be added in a table migration. The complete table will be deleted and recreated.",
+      "table": "message_attachments",
+      "columns": [
+        "messageId"
+      ],
+      "destrucive": true
+    }
+  ],
+  "migrationApiVersion": 1
+}

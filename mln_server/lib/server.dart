@@ -1,4 +1,3 @@
-import 'package:mln_server/src/birthday_reminder.dart';
 import 'package:serverpod/serverpod.dart';
 
 import 'package:mln_server/src/web/routes/root.dart';
@@ -26,6 +25,8 @@ void run(List<String> args) async {
 
   pod.webServer.addRoute(CreateRoute(), "/api/create");
   pod.webServer.addRoute(ApiRoute(), "/api/get");
+  pod.webServer.addRoute(SendRoute(), "/api/send");
+  pod.webServer.addRoute(InboxRoute(), "/api/inbox");
 
   // Start the server.
   await pod.start();

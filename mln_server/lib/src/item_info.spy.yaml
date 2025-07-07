@@ -1,0 +1,4 @@
+class: ItemInfo
+table: item_infos
+fields:
+  name: String

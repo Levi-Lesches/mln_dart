@@ -1,0 +1,459 @@
+{
+  "moduleName": "mln",
+  "tables": [
+    {
+      "name": "item_infos",
+      "dartName": "ItemInfo",
+      "module": "mln",
+      "schema": "public",
+      "columns": [
+        {
+          "name": "id",
+          "columnType": 6,
+          "isNullable": false,
+          "columnDefault": "nextval('item_infos_id_seq'::regclass)",
+          "dartType": "int?"
+        },
+        {
+          "name": "name",
+          "columnType": 0,
+          "isNullable": false,
+          "dartType": "String"
+        }
+      ],
+      "foreignKeys": [],
+      "indexes": [
+        {
+          "indexName": "item_infos_pkey",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "id"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": true
+        }
+      ],
+      "managed": true
+    },
+    {
+      "name": "message_attachments",
+      "dartName": "MessageAttachment",
+      "module": "mln",
+      "schema": "public",
+      "columns": [
+        {
+          "name": "id",
+          "columnType": 6,
+          "isNullable": false,
+          "columnDefault": "nextval('message_attachments_id_seq'::regclass)",
+          "dartType": "int?"
+        },
+        {
+          "name": "itemId",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
+        },
+        {
+          "name": "qty",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
+        }
+      ],
+      "foreignKeys": [
+        {
+          "constraintName": "message_attachments_fk_0",
+          "columns": [
+            "itemId"
+          ],
+          "referenceTable": "item_infos",
+          "referenceTableSchema": "public",
+          "referenceColumns": [
+            "id"
+          ],
+          "onUpdate": 3,
+          "onDelete": 3
+        }
+      ],
+      "indexes": [
+        {
+          "indexName": "message_attachments_pkey",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "id"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": true
+        }
+      ],
+      "managed": true
+    },
+    {
+      "name": "message_bodies",
+      "dartName": "MessageBody",
+      "module": "mln",
+      "schema": "public",
+      "columns": [
+        {
+          "name": "id",
+          "columnType": 6,
+          "isNullable": false,
+          "columnDefault": "nextval('message_bodies_id_seq'::regclass)",
+          "dartType": "int?"
+        },
+        {
+          "name": "subject",
+          "columnType": 0,
+          "isNullable": false,
+          "dartType": "String"
+        },
+        {
+          "name": "text",
+          "columnType": 0,
+          "isNullable": false,
+          "dartType": "String"
+        }
+      ],
+      "foreignKeys": [],
+      "indexes": [
+        {
+          "indexName": "message_bodies_pkey",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "id"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": true
+        }
+      ],
+      "managed": true
+    },
+    {
+      "name": "message_table_attachments",
+      "dartName": "MessageTemplateAttachment",
+      "module": "mln",
+      "schema": "public",
+      "columns": [
+        {
+          "name": "id",
+          "columnType": 6,
+          "isNullable": false,
+          "columnDefault": "nextval('message_table_attachments_id_seq'::regclass)",
+          "dartType": "int?"
+        },
+        {
+          "name": "templateId",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
+        },
+        {
+          "name": "itemId",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
+        },
+        {
+          "name": "qty",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
+        }
+      ],
+      "foreignKeys": [
+        {
+          "constraintName": "message_table_attachments_fk_0",
+          "columns": [
+            "templateId"
+          ],
+          "referenceTable": "message_templates",
+          "referenceTableSchema": "public",
+          "referenceColumns": [
+            "id"
+          ],
+          "onUpdate": 3,
+          "onDelete": 3
+        },
+        {
+          "constraintName": "message_table_attachments_fk_1",
+          "columns": [
+            "itemId"
+          ],
+          "referenceTable": "item_infos",
+          "referenceTableSchema": "public",
+          "referenceColumns": [
+            "id"
+          ],
+          "onUpdate": 3,
+          "onDelete": 3
+        }
+      ],
+      "indexes": [
+        {
+          "indexName": "message_table_attachments_pkey",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "id"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": true
+        }
+      ],
+      "managed": true
+    },
+    {
+      "name": "message_templates",
+      "dartName": "MessageTemplate",
+      "module": "mln",
+      "schema": "public",
+      "columns": [
+        {
+          "name": "id",
+          "columnType": 6,
+          "isNullable": false,
+          "columnDefault": "nextval('message_templates_id_seq'::regclass)",
+          "dartType": "int?"
+        },
+        {
+          "name": "bodyId",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
+        }
+      ],
+      "foreignKeys": [
+        {
+          "constraintName": "message_templates_fk_0",
+          "columns": [
+            "bodyId"
+          ],
+          "referenceTable": "message_bodies",
+          "referenceTableSchema": "public",
+          "referenceColumns": [
+            "id"
+          ],
+          "onUpdate": 3,
+          "onDelete": 3
+        }
+      ],
+      "indexes": [
+        {
+          "indexName": "message_templates_pkey",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "id"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": true
+        }
+      ],
+      "managed": true
+    },
+    {
+      "name": "messages",
+      "dartName": "Message",
+      "module": "mln",
+      "schema": "public",
+      "columns": [
+        {
+          "name": "id",
+          "columnType": 6,
+          "isNullable": false,
+          "columnDefault": "nextval('messages_id_seq'::regclass)",
+          "dartType": "int?"
+        },
+        {
+          "name": "senderId",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
+        },
+        {
+          "name": "reipientId",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
+        },
+        {
+          "name": "bodyId",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
+        }
+      ],
+      "foreignKeys": [
+        {
+          "constraintName": "messages_fk_0",
+          "columns": [
+            "senderId"
+          ],
+          "referenceTable": "user",
+          "referenceTableSchema": "public",
+          "referenceColumns": [
+            "id"
+          ],
+          "onUpdate": 3,
+          "onDelete": 3
+        },
+        {
+          "constraintName": "messages_fk_1",
+          "columns": [
+            "reipientId"
+          ],
+          "referenceTable": "user",
+          "referenceTableSchema": "public",
+          "referenceColumns": [
+            "id"
+          ],
+          "onUpdate": 3,
+          "onDelete": 3
+        },
+        {
+          "constraintName": "messages_fk_2",
+          "columns": [
+            "bodyId"
+          ],
+          "referenceTable": "message_bodies",
+          "referenceTableSchema": "public",
+          "referenceColumns": [
+            "id"
+          ],
+          "onUpdate": 3,
+          "onDelete": 3
+        }
+      ],
+      "indexes": [
+        {
+          "indexName": "messages_pkey",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "id"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": true
+        }
+      ],
+      "managed": true
+    },
+    {
+      "name": "profile",
+      "dartName": "Profile",
+      "module": "mln",
+      "schema": "public",
+      "columns": [
+        {
+          "name": "id",
+          "columnType": 6,
+          "isNullable": false,
+          "columnDefault": "nextval('profile_id_seq'::regclass)",
+          "dartType": "int?"
+        },
+        {
+          "name": "isNetworker",
+          "columnType": 1,
+          "isNullable": false,
+          "dartType": "bool"
+        },
+        {
+          "name": "userId",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
+        }
+      ],
+      "foreignKeys": [
+        {
+          "constraintName": "profile_fk_0",
+          "columns": [
+            "userId"
+          ],
+          "referenceTable": "user",
+          "referenceTableSchema": "public",
+          "referenceColumns": [
+            "id"
+          ],
+          "onUpdate": 3,
+          "onDelete": 3
+        }
+      ],
+      "indexes": [
+        {
+          "indexName": "profile_pkey",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "id"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": true
+        }
+      ],
+      "managed": true
+    },
+    {
+      "name": "user",
+      "dartName": "User",
+      "module": "mln",
+      "schema": "public",
+      "columns": [
+        {
+          "name": "id",
+          "columnType": 6,
+          "isNullable": false,
+          "columnDefault": "nextval('user_id_seq'::regclass)",
+          "dartType": "int?"
+        },
+        {
+          "name": "username",
+          "columnType": 0,
+          "isNullable": false,
+          "dartType": "String"
+        }
+      ],
+      "foreignKeys": [],
+      "indexes": [
+        {
+          "indexName": "user_pkey",
+          "elements": [
+            {
+              "type": 0,
+              "definition": "id"
+            }
+          ],
+          "type": "btree",
+          "isUnique": true,
+          "isPrimary": true
+        }
+      ],
+      "managed": true
+    }
+  ],
+  "installedModules": [
+    {
+      "module": "serverpod",
+      "version": "20240516151843329"
+    }
+  ],
+  "migrationApiVersion": 1
+}

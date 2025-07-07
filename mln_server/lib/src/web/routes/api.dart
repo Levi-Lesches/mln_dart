@@ -28,6 +28,74 @@ class CreateRoute extends WidgetRoute {
   }
 }
 
+extension on Session {
+  Future<User?> getUser(String username) =>
+    User.db.findFirstRow(this, where: (user) => user.username.equals(username));
+
+  Future<User> createUser(String username) =>
+    User.db.insertRow(this, User(username: username));
+
+  Future<MessageBody?> getBody(String subject) =>
+    MessageBody.db.findFirstRow(this, where: (body) => body.subject.equals(subject));
+
+  Future<MessageBody> createBody(String subject, String text) =>
+    MessageBody.db.insertRow(this, MessageBody(subject: subject, text: text));
+
+  Future<ItemInfo?> getItem(String name) =>
+    ItemInfo.db.findFirstRow(this, where: (item) => item.name.equals(name));
+
+  Future<ItemInfo> createItem(String name) =>
+    ItemInfo.db.insertRow(this, ItemInfo(name: name));
+}
+
+class SendRoute extends WidgetRoute {
+  @override
+  Future<WidgetJson> build(Session session, HttpRequest request) async {
+    final json = await request.toJson();
+    final from = json["from"]!;
+    final to = json["to"]!;
+    final subject = json["subject"]!;
+    final text = json["text"]!;
+    final itemName = json["item"]!;
+    final qty = json["qty"]! as int;
+
+    final fromUser = await session.getUser(from) ?? await session.createUser(from);
+    final toUser = await session.getUser(to) ?? await session.createUser(to);
+    final body = await session.getBody(subject) ?? await session.createBody(subject, text);
+    final item = await session.getItem(itemName) ?? await session.createItem(itemName);
+    var message = Message(senderId: fromUser.id!, reipientId: toUser.id!, bodyId: body.id!);
+    message = await Message.db.insertRow(session, message);
+    var attachment = MessageAttachment(itemId: item.id!, messageId: message.id!, qty: qty);
+    attachment = await MessageAttachment.db.insertRow(session, attachment);
+    return request.respond(201, {"message_id": message.id!, "attachment": attachment.toJson(), "message": message.toJson()});
+  }
+}
+
+class InboxRoute extends WidgetRoute {
+  @override
+  Future<WidgetJson> build(Session session, HttpRequest request) async {
+    final data = await request.toJson();
+    final username = data["username"]!;
+    final messages = await MessageAttachment.db.find(
+      session,
+      where: (attachment) => attachment.message.reipient.username.equals(username),
+      // where: (message) => message.reipient.username.equals(username),
+      include: MessageAttachment.include(
+        item: ItemInfo.include(),
+        message: Message.include(
+          sender: User.include(),
+          reipient: User.include(),
+          body: MessageBody.include(),
+        ),
+      ),
+    );
+    return WidgetJson(object: [
+      for (final message in messages)
+        message.toJson(),
+    ]);
+  }
+}
+
 class ApiRoute extends WidgetRoute {
   @override
   Future<WidgetJson> build(Session session, HttpRequest request) async {
