@@ -1,0 +1,7 @@
+class: Profile
+
+table: profile
+
+fields:
+  isNetworker: bool
+  user: User?, relation
