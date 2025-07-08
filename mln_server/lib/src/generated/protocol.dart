@@ -18,15 +18,21 @@ import 'message.dart' as _i6;
 import 'message_attachment.dart' as _i7;
 import 'message_body.dart' as _i8;
 import 'message_template.dart' as _i9;
-import 'profile.dart' as _i10;
-import 'template_attachments.dart' as _i11;
-import 'user.dart' as _i12;
+import 'oauth_client.dart' as _i10;
+import 'oauth_code.dart' as _i11;
+import 'oauth_token.dart' as _i12;
+import 'profile.dart' as _i13;
+import 'template_attachments.dart' as _i14;
+import 'user.dart' as _i15;
 export 'greeting.dart';
 export 'item_info.dart';
 export 'message.dart';
 export 'message_attachment.dart';
 export 'message_body.dart';
 export 'message_template.dart';
+export 'oauth_client.dart';
+export 'oauth_code.dart';
+export 'oauth_token.dart';
 export 'profile.dart';
 export 'template_attachments.dart';
 export 'user.dart';
@@ -395,6 +401,210 @@ class Protocol extends _i1.SerializationManagerServer {
       managed: true,
     ),
     _i2.TableDefinition(
+      name: 'oauth_clients',
+      dartName: 'OAuthClient',
+      schema: 'public',
+      module: 'mln',
+      columns: [
+        _i2.ColumnDefinition(
+          name: 'id',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int?',
+          columnDefault: 'nextval(\'oauth_clients_id_seq\'::regclass)',
+        ),
+        _i2.ColumnDefinition(
+          name: 'clientID',
+          columnType: _i2.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _i2.ColumnDefinition(
+          name: 'clientName',
+          columnType: _i2.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _i2.ColumnDefinition(
+          name: 'clientSecret',
+          columnType: _i2.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _i2.ColumnDefinition(
+          name: 'imageUrl',
+          columnType: _i2.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+      ],
+      foreignKeys: [],
+      indexes: [
+        _i2.IndexDefinition(
+          indexName: 'oauth_clients_pkey',
+          tableSpace: null,
+          elements: [
+            _i2.IndexElementDefinition(
+              type: _i2.IndexElementDefinitionType.column,
+              definition: 'id',
+            )
+          ],
+          type: 'btree',
+          isUnique: true,
+          isPrimary: true,
+        )
+      ],
+      managed: true,
+    ),
+    _i2.TableDefinition(
+      name: 'oauth_codes',
+      dartName: 'OAuthCode',
+      schema: 'public',
+      module: 'mln',
+      columns: [
+        _i2.ColumnDefinition(
+          name: 'id',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int?',
+          columnDefault: 'nextval(\'oauth_codes_id_seq\'::regclass)',
+        ),
+        _i2.ColumnDefinition(
+          name: 'userId',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _i2.ColumnDefinition(
+          name: 'authCode',
+          columnType: _i2.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _i2.ColumnDefinition(
+          name: 'clientId',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _i2.ColumnDefinition(
+          name: 'generatedAt',
+          columnType: _i2.ColumnType.timestampWithoutTimeZone,
+          isNullable: false,
+          dartType: 'DateTime',
+        ),
+      ],
+      foreignKeys: [
+        _i2.ForeignKeyDefinition(
+          constraintName: 'oauth_codes_fk_0',
+          columns: ['userId'],
+          referenceTable: 'user',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _i2.ForeignKeyAction.noAction,
+          onDelete: _i2.ForeignKeyAction.noAction,
+          matchType: null,
+        ),
+        _i2.ForeignKeyDefinition(
+          constraintName: 'oauth_codes_fk_1',
+          columns: ['clientId'],
+          referenceTable: 'oauth_clients',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _i2.ForeignKeyAction.noAction,
+          onDelete: _i2.ForeignKeyAction.noAction,
+          matchType: null,
+        ),
+      ],
+      indexes: [
+        _i2.IndexDefinition(
+          indexName: 'oauth_codes_pkey',
+          tableSpace: null,
+          elements: [
+            _i2.IndexElementDefinition(
+              type: _i2.IndexElementDefinitionType.column,
+              definition: 'id',
+            )
+          ],
+          type: 'btree',
+          isUnique: true,
+          isPrimary: true,
+        )
+      ],
+      managed: true,
+    ),
+    _i2.TableDefinition(
+      name: 'oauth_tokens',
+      dartName: 'OAuthToken',
+      schema: 'public',
+      module: 'mln',
+      columns: [
+        _i2.ColumnDefinition(
+          name: 'id',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int?',
+          columnDefault: 'nextval(\'oauth_tokens_id_seq\'::regclass)',
+        ),
+        _i2.ColumnDefinition(
+          name: 'accessToken',
+          columnType: _i2.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _i2.ColumnDefinition(
+          name: 'userId',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _i2.ColumnDefinition(
+          name: 'clientId',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+      ],
+      foreignKeys: [
+        _i2.ForeignKeyDefinition(
+          constraintName: 'oauth_tokens_fk_0',
+          columns: ['userId'],
+          referenceTable: 'user',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _i2.ForeignKeyAction.noAction,
+          onDelete: _i2.ForeignKeyAction.noAction,
+          matchType: null,
+        ),
+        _i2.ForeignKeyDefinition(
+          constraintName: 'oauth_tokens_fk_1',
+          columns: ['clientId'],
+          referenceTable: 'oauth_clients',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _i2.ForeignKeyAction.noAction,
+          onDelete: _i2.ForeignKeyAction.noAction,
+          matchType: null,
+        ),
+      ],
+      indexes: [
+        _i2.IndexDefinition(
+          indexName: 'oauth_tokens_pkey',
+          tableSpace: null,
+          elements: [
+            _i2.IndexElementDefinition(
+              type: _i2.IndexElementDefinitionType.column,
+              definition: 'id',
+            )
+          ],
+          type: 'btree',
+          isUnique: true,
+          isPrimary: true,
+        )
+      ],
+      managed: true,
+    ),
+    _i2.TableDefinition(
       name: 'profile',
       dartName: 'Profile',
       schema: 'public',
@@ -515,14 +725,23 @@ class Protocol extends _i1.SerializationManagerServer {
     if (t == _i9.MessageTemplate) {
       return _i9.MessageTemplate.fromJson(data) as T;
     }
-    if (t == _i10.Profile) {
-      return _i10.Profile.fromJson(data) as T;
+    if (t == _i10.OAuthClient) {
+      return _i10.OAuthClient.fromJson(data) as T;
     }
-    if (t == _i11.MessageTemplateAttachment) {
-      return _i11.MessageTemplateAttachment.fromJson(data) as T;
+    if (t == _i11.OAuthCode) {
+      return _i11.OAuthCode.fromJson(data) as T;
     }
-    if (t == _i12.User) {
-      return _i12.User.fromJson(data) as T;
+    if (t == _i12.OAuthToken) {
+      return _i12.OAuthToken.fromJson(data) as T;
+    }
+    if (t == _i13.Profile) {
+      return _i13.Profile.fromJson(data) as T;
+    }
+    if (t == _i14.MessageTemplateAttachment) {
+      return _i14.MessageTemplateAttachment.fromJson(data) as T;
+    }
+    if (t == _i15.User) {
+      return _i15.User.fromJson(data) as T;
     }
     if (t == _i1.getType<_i4.Greeting?>()) {
       return (data != null ? _i4.Greeting.fromJson(data) : null) as T;
@@ -542,16 +761,25 @@ class Protocol extends _i1.SerializationManagerServer {
     if (t == _i1.getType<_i9.MessageTemplate?>()) {
       return (data != null ? _i9.MessageTemplate.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i10.Profile?>()) {
-      return (data != null ? _i10.Profile.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i10.OAuthClient?>()) {
+      return (data != null ? _i10.OAuthClient.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i11.MessageTemplateAttachment?>()) {
+    if (t == _i1.getType<_i11.OAuthCode?>()) {
+      return (data != null ? _i11.OAuthCode.fromJson(data) : null) as T;
+    }
+    if (t == _i1.getType<_i12.OAuthToken?>()) {
+      return (data != null ? _i12.OAuthToken.fromJson(data) : null) as T;
+    }
+    if (t == _i1.getType<_i13.Profile?>()) {
+      return (data != null ? _i13.Profile.fromJson(data) : null) as T;
+    }
+    if (t == _i1.getType<_i14.MessageTemplateAttachment?>()) {
       return (data != null
-          ? _i11.MessageTemplateAttachment.fromJson(data)
+          ? _i14.MessageTemplateAttachment.fromJson(data)
           : null) as T;
     }
-    if (t == _i1.getType<_i12.User?>()) {
-      return (data != null ? _i12.User.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i15.User?>()) {
+      return (data != null ? _i15.User.fromJson(data) : null) as T;
     }
     try {
       return _i3.Protocol().deserialize<T>(data, t);
@@ -584,13 +812,22 @@ class Protocol extends _i1.SerializationManagerServer {
     if (data is _i9.MessageTemplate) {
       return 'MessageTemplate';
     }
-    if (data is _i10.Profile) {
+    if (data is _i10.OAuthClient) {
+      return 'OAuthClient';
+    }
+    if (data is _i11.OAuthCode) {
+      return 'OAuthCode';
+    }
+    if (data is _i12.OAuthToken) {
+      return 'OAuthToken';
+    }
+    if (data is _i13.Profile) {
       return 'Profile';
     }
-    if (data is _i11.MessageTemplateAttachment) {
+    if (data is _i14.MessageTemplateAttachment) {
       return 'MessageTemplateAttachment';
     }
-    if (data is _i12.User) {
+    if (data is _i15.User) {
       return 'User';
     }
     className = _i2.Protocol().getClassNameForObject(data);
@@ -628,14 +865,23 @@ class Protocol extends _i1.SerializationManagerServer {
     if (dataClassName == 'MessageTemplate') {
       return deserialize<_i9.MessageTemplate>(data['data']);
     }
+    if (dataClassName == 'OAuthClient') {
+      return deserialize<_i10.OAuthClient>(data['data']);
+    }
+    if (dataClassName == 'OAuthCode') {
+      return deserialize<_i11.OAuthCode>(data['data']);
+    }
+    if (dataClassName == 'OAuthToken') {
+      return deserialize<_i12.OAuthToken>(data['data']);
+    }
     if (dataClassName == 'Profile') {
-      return deserialize<_i10.Profile>(data['data']);
+      return deserialize<_i13.Profile>(data['data']);
     }
     if (dataClassName == 'MessageTemplateAttachment') {
-      return deserialize<_i11.MessageTemplateAttachment>(data['data']);
+      return deserialize<_i14.MessageTemplateAttachment>(data['data']);
     }
     if (dataClassName == 'User') {
-      return deserialize<_i12.User>(data['data']);
+      return deserialize<_i15.User>(data['data']);
     }
     if (dataClassName.startsWith('serverpod.')) {
       data['className'] = dataClassName.substring(10);
@@ -673,12 +919,18 @@ class Protocol extends _i1.SerializationManagerServer {
         return _i8.MessageBody.t;
       case _i9.MessageTemplate:
         return _i9.MessageTemplate.t;
-      case _i10.Profile:
-        return _i10.Profile.t;
-      case _i11.MessageTemplateAttachment:
-        return _i11.MessageTemplateAttachment.t;
-      case _i12.User:
-        return _i12.User.t;
+      case _i10.OAuthClient:
+        return _i10.OAuthClient.t;
+      case _i11.OAuthCode:
+        return _i11.OAuthCode.t;
+      case _i12.OAuthToken:
+        return _i12.OAuthToken.t;
+      case _i13.Profile:
+        return _i13.Profile.t;
+      case _i14.MessageTemplateAttachment:
+        return _i14.MessageTemplateAttachment.t;
+      case _i15.User:
+        return _i15.User.t;
     }
     return null;
   }

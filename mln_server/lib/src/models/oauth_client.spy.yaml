@@ -1,0 +1,7 @@
+class: OAuthClient
+table: oauth_clients
+fields:
+  clientID: String
+  clientName: String
+  clientSecret: String
+  imageUrl: String
