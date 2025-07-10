@@ -1,0 +1,7 @@
+class: OAuthCode
+table: oauth_codes
+fields:
+  user: User?, relation
+  authCode: String
+  client: OAuthClient?, relation
+  generatedAt: DateTime

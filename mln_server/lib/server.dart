@@ -3,6 +3,7 @@ import 'package:serverpod/serverpod.dart';
 import 'src/generated/protocol.dart';
 import 'src/generated/endpoints.dart';
 import 'src/routes/auth.dart';
+import 'src/routes/oauth.dart';
 import 'src/routes/mail.dart';
 
 // This is the starting point of your Serverpod server. In most cases, you will
@@ -27,6 +28,8 @@ void run(List<String> args) async {
   pod.webServer.addRoute(InboxRoute(), "/api/inbox");
   pod.webServer.addRoute(AuthRoute(), "/api/login");
   pod.webServer.addRoute(AuthTestRoute(), "/api/auth-test");
+  pod.webServer.addRoute(OAuthTokenRoute(), "/api/oauth/token");
+  pod.webServer.addRoute(OAuthLoginRoute(), "/api/oauth/login");
 
   // Start the server.
   await pod.start();

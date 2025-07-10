@@ -1,0 +1,6 @@
+class: OAuthToken
+table: oauth_tokens
+fields:
+  accessToken: String
+  user: User?, relation
+  client: OAuthClient?, relation
